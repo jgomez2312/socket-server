@@ -3,6 +3,7 @@ import { SERVER_PORT } from '../global/environment';
 import socketIO, { Socket } from 'socket.io';
 import http, { createServer } from 'http';
 
+import * as socket from '../sockets/sockets';
 
 export default class Server{
 
@@ -28,10 +29,18 @@ export default class Server{
     }
 
     private escucharSocket(){
+        
         console.log('Escuchando conexiones');
         
-        this.io.on('connection', (socket: Socket) => {
-            console.log('Cliente conectado');
+        this.io.on('connection', (cliente: Socket) => {
+            
+            console.log('## - ## Cliente conectado ## - ##');
+
+            // Mensajes
+            socket.mensaje( cliente, this.io );
+
+            // Desconectar
+            socket.desconectar( cliente );
         });
     }
 
